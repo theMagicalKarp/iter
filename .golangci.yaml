@@ -1,0 +1,11 @@
+linters:
+  disable:
+    - dupl
+    - ireturn
+    - varnamelen
+
+issues:
+  exclude-rules:
+    - path: itertools/print.go
+      linters:
+        - forbidigo

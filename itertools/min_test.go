@@ -1,0 +1,41 @@
+package itertools_test
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/theMagicalKarp/iter"
+	"github.com/theMagicalKarp/iter/itertools"
+)
+
+func TestMinBasic(t *testing.T) {
+	t.Parallel()
+
+	result := itertools.Min(iter.NewIter(1, 2, 3, 6, 4, 5))
+
+	assert.Equal(t, 1, result)
+}
+
+func TestMinEmtpy(t *testing.T) {
+	t.Parallel()
+
+	result := itertools.Min(iter.NewIter[int]())
+
+	assert.Equal(t, 0, result)
+}
+
+func TestMinNegatives(t *testing.T) {
+	t.Parallel()
+
+	result := itertools.Min(iter.NewIter(-5, -4, -3, -2, -1))
+
+	assert.Equal(t, -5, result)
+}
+
+func TestMinMixed(t *testing.T) {
+	t.Parallel()
+
+	result := itertools.Min(iter.NewIter(3, 4, 1, 2, 5))
+
+	assert.Equal(t, 1, result)
+}

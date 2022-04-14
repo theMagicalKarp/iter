@@ -1,0 +1,10 @@
+groupby(iter, keyfunc) -> Map[key, Iter[V]]
+
+window(iter, n) -> iter            'abcdefg' -> 'abc', 'bcd', 'cde'
+
+slice(iter, start, end) -> iter
+
+unzip(iter[tuple]) -> iter[first], iter[second]
+
+
+~/go/bin/golangci-lint run --enable-all
