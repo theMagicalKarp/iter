@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   test-lint:
-    run: Test/Lint
+    name: Test/Lint
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -29,7 +29,6 @@ jobs:
         run: go test ./...
 
       - name: Linter
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v4
         with:
-          version: v1.54
-          args: --enable-all
+          version: v1.56.2
