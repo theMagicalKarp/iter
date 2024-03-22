@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"net/http"
 	"unicode"
 
 	"github.com/theMagicalKarp/iter/pkg/containers/tuple"
@@ -99,13 +99,13 @@ func IsAdjacent(coordinates map[Coordinate]bool) func(Number) bool {
 }
 
 func main() {
-	f, err := os.Open("examples/example3/input.txt")
+	resp, err := http.Get("https://gist.githubusercontent.com/theMagicalKarp/089e97377f559b65503d17f8dddea5f4/raw/18d74d27fee9d727d4dbc50ce85569eb2ced8a75/advent_2023_day3.txt")
 	if err != nil {
 		panic(err)
 	}
+	defer resp.Body.Close()
 
-	defer f.Close()
-	first, second := itertools.Tee(itertools.Enumerate(itertools.Lines(f)))
+	first, second := itertools.Tee(itertools.Enumerate(itertools.Lines(resp.Body)))
 
 	numbers := itertools.Flatten(itertools.Map(first, ProcessLine))
 	symbolCoordinates := itertools.Set(itertools.Flatten(

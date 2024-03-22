@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"net/http"
 	"strings"
 
 	"github.com/theMagicalKarp/iter/pkg/iter"
@@ -72,13 +72,13 @@ func LowestAllowedProduct(game Game) int {
 }
 
 func main() {
-	f, err := os.Open("examples/example2/input.txt")
+	resp, err := http.Get("https://gist.githubusercontent.com/theMagicalKarp/089e97377f559b65503d17f8dddea5f4/raw/18d74d27fee9d727d4dbc50ce85569eb2ced8a75/advent_2023_day2.txt")
 	if err != nil {
 		panic(err)
 	}
-	defer f.Close()
+	defer resp.Body.Close()
 
-	lines := itertools.Lines(f)
+	lines := itertools.Lines(resp.Body)
 	games := itertools.Map(lines, UnmarshalGame)
 
 	minProducts := itertools.Map(games, LowestAllowedProduct)
