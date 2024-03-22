@@ -1,7 +1,15 @@
 # Iter
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/theMagicalKarp/iter.svg)](https://pkg.go.dev/github.com/theMagicalKarp/iter)
+[![Go Report Card](https://goreportcard.com/badge/github.com/theMagicalKarp/iter)](https://goreportcard.com/report/github.com/theMagicalKarp/iter)
+
 Iter is a _simple_ and _ergonomic_ package for implementing and utilizing
 iterators in Golang.
+
+> [!NOTE]
+> [Discussion for Native Iterators in Go](https://github.com/golang/go/issues/61897)
+> 
+> This project welcomes and acknowledges this discussion but does not currently align with the proposal.
 
 ## Features
 
