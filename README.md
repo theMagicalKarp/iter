@@ -1,5 +1,7 @@
 # Iter
 
+<img align="right" height="125" src="./docs/assets/iter.png" />
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/theMagicalKarp/iter.svg)](https://pkg.go.dev/github.com/theMagicalKarp/iter)
 [![Go Report Card](https://goreportcard.com/badge/github.com/theMagicalKarp/iter)](https://goreportcard.com/report/github.com/theMagicalKarp/iter)
 
