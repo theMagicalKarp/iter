@@ -34,9 +34,12 @@ func (f *flattenIter[T]) Next() (T, bool) {
 	return empty, false
 }
 
-func Flatten[T any](chain iter.Iterable[iter.Iterable[T]]) iter.Iterable[T] {
+// Flatten returns an iterable that flattens a chain of iterables into a single iterable.
+// It takes a variadic argument `chain` of type `iter.Iterable[iter.Iterable[T]]`, where `T` can be any type.
+// The function returns an iterable of type `iter.Iterable[T]`.
+func Flatten[T any](chain ...iter.Iterable[iter.Iterable[T]]) iter.Iterable[T] {
 	return &flattenIter[T]{
-		chain:   chain,
+		chain:   Chain(chain...),
 		current: nil,
 	}
 }
