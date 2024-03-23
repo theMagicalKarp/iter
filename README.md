@@ -51,8 +51,8 @@ func main() {
 		return n*n
 	})
 
-  itertools.Print(squaredNumbers)
-  // 0, 4, 16, 36, 64
+	itertools.Print(squaredNumbers)
+	// 0, 4, 16, 36, 64
 }
 ```
 
