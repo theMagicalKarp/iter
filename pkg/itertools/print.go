@@ -2,6 +2,7 @@ package itertools
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/theMagicalKarp/iter/pkg/iter"
 )
@@ -16,7 +17,9 @@ func Println[T any](iter iter.Iterable[T]) {
 			return
 		}
 
-		fmt.Println(value)
+		// Errors writing to stdout are deliberately dropped, matching the
+		// behaviour of fmt.Println.
+		_, _ = fmt.Fprintln(os.Stdout, value)
 	}
 }
 
@@ -34,11 +37,11 @@ func Print[T any](iter iter.Iterable[T]) {
 	for {
 		value, more := items.Next()
 		if !more {
-			fmt.Print("\n")
+			_, _ = fmt.Fprint(os.Stdout, "\n")
 
 			return
 		}
 
-		fmt.Print(value)
+		_, _ = fmt.Fprint(os.Stdout, value)
 	}
 }

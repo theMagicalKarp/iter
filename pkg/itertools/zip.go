@@ -27,7 +27,10 @@ func (z *zipIter[T, V]) Next() (tuple.Tuple[T, V], bool) {
 // The resulting iterable yields tuples where the i-th tuple contains the i-th element from the first iterable
 // and the i-th element from the second iterable.
 // The iterator stops when the shortest input iterable is exhausted.
-func Zip[T any, V any](first iter.Iterable[T], second iter.Iterable[V]) iter.Iterable[tuple.Tuple[T, V]] {
+func Zip[T any, V any](
+	first iter.Iterable[T],
+	second iter.Iterable[V],
+) iter.Iterable[tuple.Tuple[T, V]] {
 	return &zipIter[T, V]{
 		first:  first,
 		second: second,

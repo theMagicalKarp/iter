@@ -34,6 +34,7 @@ func (d *dropIter[T]) Next() (T, bool) {
 func Drop[T any](iter iter.Iterable[T], count int) iter.Iterable[T] {
 	return &dropIter[T]{
 		count: count,
+		index: 0,
 		iter:  iter,
 	}
 }

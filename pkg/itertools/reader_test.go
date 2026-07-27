@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/theMagicalKarp/iter/pkg/iter"
 	"github.com/theMagicalKarp/iter/pkg/itertools"
 )
@@ -18,6 +19,7 @@ func ExampleReader() {
 	reader := itertools.Reader(iter)
 
 	buffer := new(strings.Builder)
+
 	_, err := io.Copy(buffer, reader)
 	if err != nil {
 		panic(err)
@@ -48,7 +50,7 @@ func TestBasicReader(t *testing.T) {
 	expectedOutput := []byte("HelloWorldAbcDefSharks!")
 	output := make([]byte, len(expectedOutput))
 	n, err := reader.Read(output)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, len(expectedOutput), n)
 	assert.Equal(t, expectedOutput, output)
 
@@ -75,10 +77,10 @@ func TestTinyReads(t *testing.T) {
 	// Read from the reader and verify the output
 	expectedOutput := []byte("HelloWorldAbcDefSharks!")
 
-	for i := 0; i < len(expectedOutput); i++ {
+	for i := range expectedOutput {
 		output := make([]byte, 1)
 		n, err := reader.Read(output)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, 1, n)
 		assert.Equal(t, expectedOutput[i:i+1], output)
 	}
@@ -107,10 +109,10 @@ func TestSmallReads(t *testing.T) {
 	// Read from the reader and verify the output
 	expectedOutput := []byte("HelloWorldAbcDefSharks!foo")
 
-	for i := 0; i < len(expectedOutput)/2; i++ {
+	for i := range len(expectedOutput) / 2 {
 		output := make([]byte, 2)
 		n, err := reader.Read(output)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, 2, n)
 		assert.Equal(t, expectedOutput[i*2:i*2+2], output)
 	}
@@ -140,10 +142,10 @@ func TestLittleReads(t *testing.T) {
 	// Read from the reader and verify the output
 	expectedOutput := []byte("!HelloWorldAbcDefSharks!foo")
 
-	for i := 0; i < len(expectedOutput)/3; i++ {
+	for i := range len(expectedOutput) / 3 {
 		output := make([]byte, 3)
 		n, err := reader.Read(output)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, 3, n)
 		assert.Equal(t, expectedOutput[i*3:i*3+3], output)
 	}
@@ -172,7 +174,7 @@ func TestReaderBigBuffer(t *testing.T) {
 	expectedOutput := []byte("HelloWorldAbcDefSharks!")
 	output := make([]byte, 256)
 	n, err := reader.Read(output)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, len(expectedOutput), n)
 	assert.Equal(t, append(expectedOutput, make([]byte, 233)...), output)
 
@@ -192,7 +194,7 @@ func TestEmptyReader(t *testing.T) {
 	assert.Equal(t, err, io.EOF)
 	assert.Equal(t, 0, n)
 
-	for i := 0; i < 256; i++ {
+	for i := range 256 {
 		assert.Equal(t, byte(0), output[i])
 	}
 }
@@ -207,9 +209,11 @@ func TestReaderCopy(t *testing.T) {
 		[]byte("Sharks!"),
 	}
 	iter := iter.New(testData...)
+
 	var b bytes.Buffer
+
 	written, err := io.Copy(&b, itertools.Reader(iter))
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, int64(23), written)
 	assert.Equal(t, "HelloWorldAbcDefSharks!", b.String())
 }
@@ -224,10 +228,12 @@ func TestReaderCopySmallBuffer(t *testing.T) {
 		[]byte("Sharks!"),
 	}
 	iter := iter.New(testData...)
+
 	var b bytes.Buffer
+
 	copyBuffer := make([]byte, 3)
 	written, err := io.CopyBuffer(&b, itertools.Reader(iter), copyBuffer)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, int64(23), written)
 	assert.Equal(t, "HelloWorldAbcDefSharks!", b.String())
 }

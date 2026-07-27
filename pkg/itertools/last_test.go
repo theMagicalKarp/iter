@@ -30,7 +30,7 @@ func TestLastIfBasic(t *testing.T) {
 func TestLastIFBasicDNE(t *testing.T) {
 	t.Parallel()
 
-	result, found := itertools.LastIf(iter.New(1, 2, 3, 4, 5), func(n int) bool {
+	result, found := itertools.LastIf(iter.New(1, 2, 3, 4, 5), func(_ int) bool {
 		return false
 	})
 
@@ -41,7 +41,7 @@ func TestLastIFBasicDNE(t *testing.T) {
 func TestLastIfBasicEmpty(t *testing.T) {
 	t.Parallel()
 
-	result, found := itertools.LastIf(iter.New[int](), func(n int) bool {
+	result, found := itertools.LastIf(iter.New[int](), func(_ int) bool {
 		return true
 	})
 

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/theMagicalKarp/iter/pkg/predicates"
 )
 
@@ -12,9 +13,8 @@ func TestIsFile(t *testing.T) {
 	t.Parallel()
 
 	// Create a temporary file for testing
-	file, err := os.CreateTemp("", "testfile")
-	assert.NoError(t, err)
-	defer os.Remove(file.Name())
+	file, err := os.CreateTemp(t.TempDir(), "testfile")
+	require.NoError(t, err)
 
 	// Test with a file path
 	isFile := predicates.IsFile(file.Name())
@@ -33,9 +33,8 @@ func TestIsDir(t *testing.T) {
 	assert.True(t, isDir)
 
 	// Test with a file path
-	file, err := os.CreateTemp("", "testfile")
-	assert.NoError(t, err)
-	defer os.Remove(file.Name())
+	file, err := os.CreateTemp(t.TempDir(), "testfile")
+	require.NoError(t, err)
 
 	isDir = predicates.IsDir(file.Name())
 	assert.False(t, isDir)
@@ -44,9 +43,8 @@ func TestIsDir(t *testing.T) {
 func TestPathExists(t *testing.T) {
 	t.Parallel()
 
-	file, err := os.CreateTemp("", "testfile")
-	assert.NoError(t, err)
-	defer os.Remove(file.Name())
+	file, err := os.CreateTemp(t.TempDir(), "testfile")
+	require.NoError(t, err)
 
 	exists := predicates.PathExists(file.Name())
 	assert.True(t, exists)

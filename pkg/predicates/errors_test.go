@@ -44,6 +44,8 @@ func ExampleHasError() {
 }
 
 func TestIsError(t *testing.T) {
+	t.Parallel()
+
 	err1 := errors.New("error 1")
 	err2 := errors.New("error 2")
 	err3 := errors.New("error 3")
@@ -56,6 +58,8 @@ func TestIsError(t *testing.T) {
 }
 
 func TestErrorNested(t *testing.T) {
+	t.Parallel()
+
 	err1 := errors.New("error 1")
 	err2 := fmt.Errorf(">%w", err1)
 	err3 := fmt.Errorf(">%w", err2)
@@ -68,6 +72,8 @@ func TestErrorNested(t *testing.T) {
 }
 
 func TestHasError(t *testing.T) {
+	t.Parallel()
+
 	err1 := errors.New("error 1")
 	err2 := errors.New("error 2")
 	err3 := errors.New("error 3")
@@ -80,6 +86,8 @@ func TestHasError(t *testing.T) {
 }
 
 func TestHasErrorNested(t *testing.T) {
+	t.Parallel()
+
 	err1 := errors.New("error 1")
 	err2 := fmt.Errorf(">%w", err1)
 	err3 := fmt.Errorf(">%w", err2)

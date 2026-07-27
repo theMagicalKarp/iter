@@ -32,51 +32,51 @@ func TestTeeBasic(t *testing.T) {
 
 	v, more := a.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 1)
+	assert.Equal(t, 1, v)
 
 	v, more = b.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 1)
+	assert.Equal(t, 1, v)
 
 	v, more = a.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 2)
+	assert.Equal(t, 2, v)
 
 	v, more = b.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 2)
+	assert.Equal(t, 2, v)
 
 	v, more = b.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 3)
+	assert.Equal(t, 3, v)
 
 	v, more = b.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 4)
+	assert.Equal(t, 4, v)
 
 	v, more = a.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 3)
+	assert.Equal(t, 3, v)
 
 	v, more = a.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 4)
-
-	v, more = a.Next()
-	assert.False(t, more)
-	assert.Equal(t, v, 0)
-
-	v, more = b.Next()
-	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 4, v)
 
 	v, more = a.Next()
 	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 0, v)
 
 	v, more = b.Next()
 	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 0, v)
+
+	v, more = a.Next()
+	assert.False(t, more)
+	assert.Equal(t, 0, v)
+
+	v, more = b.Next()
+	assert.False(t, more)
+	assert.Equal(t, 0, v)
 }
 
 func TestTeeLopSided(t *testing.T) {
@@ -88,43 +88,43 @@ func TestTeeLopSided(t *testing.T) {
 
 	v, more := a.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 1)
+	assert.Equal(t, 1, v)
 
 	v, more = a.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 2)
+	assert.Equal(t, 2, v)
 
 	v, more = a.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 3)
+	assert.Equal(t, 3, v)
 
 	v, more = a.Next()
 	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 0, v)
 
 	v, more = a.Next()
 	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 0, v)
 
 	v, more = b.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 1)
+	assert.Equal(t, 1, v)
 
 	v, more = b.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 2)
+	assert.Equal(t, 2, v)
 
 	v, more = b.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, 3)
+	assert.Equal(t, 3, v)
 
 	v, more = b.Next()
 	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 0, v)
 
 	v, more = b.Next()
 	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 0, v)
 }
 
 func TestTeeEmpty(t *testing.T) {
@@ -134,19 +134,19 @@ func TestTeeEmpty(t *testing.T) {
 
 	v, more := a.Next()
 	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 0, v)
 
 	v, more = a.Next()
 	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 0, v)
 
 	v, more = b.Next()
 	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 0, v)
 
 	v, more = b.Next()
 	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 0, v)
 }
 
 func TestAsyncPull(t *testing.T) {
@@ -158,41 +158,48 @@ func TestAsyncPull(t *testing.T) {
 	n := 100000
 
 	a, b := itertools.Tee(itertools.Range(0, n))
+
 	var wg sync.WaitGroup
 	wg.Add(2)
 
 	go func() {
 		defer wg.Done()
-		for i := 0; i < n; i++ {
+
+		for i := range n {
 			time.Sleep(time.Duration(r1.Intn(10)) * time.Microsecond)
+
 			v, more := a.Next()
 			assert.True(t, more)
 			assert.Equal(t, v, i)
 		}
+
 		v, more := a.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 
 		v, more = a.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 	}()
 
 	go func() {
 		defer wg.Done()
-		for i := 0; i < n; i++ {
+
+		for i := range n {
 			time.Sleep(time.Duration(r2.Intn(15)) * time.Microsecond)
+
 			v, more := b.Next()
 			assert.True(t, more)
 			assert.Equal(t, v, i)
 		}
+
 		v, more := b.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 
 		v, more = b.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 	}()
 
 	wg.Wait()
@@ -206,40 +213,45 @@ func TestAsyncPullLopside(t *testing.T) {
 	n := 100000
 
 	a, b := itertools.Tee(itertools.Range(0, n))
+
 	var wg sync.WaitGroup
 	wg.Add(2)
 
 	go func() {
 		defer wg.Done()
-		for i := 0; i < n; i++ {
+
+		for i := range n {
 			v, more := a.Next()
 			assert.True(t, more)
 			assert.Equal(t, v, i)
 			time.Sleep(time.Duration(r1.Intn(15)) * time.Microsecond)
 		}
+
 		v, more := a.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 
 		v, more = a.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 	}()
 
 	go func() {
 		defer wg.Done()
-		for i := 0; i < n; i++ {
+
+		for i := range n {
 			v, more := b.Next()
 			assert.True(t, more)
 			assert.Equal(t, v, i)
 		}
+
 		v, more := b.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 
 		v, more = b.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 	}()
 
 	wg.Wait()
@@ -251,39 +263,44 @@ func TestAsyncPullFast(t *testing.T) {
 	n := 100000
 
 	a, b := itertools.Tee(itertools.Range(0, n))
+
 	var wg sync.WaitGroup
 	wg.Add(2)
 
 	go func() {
 		defer wg.Done()
-		for i := 0; i < n; i++ {
+
+		for i := range n {
 			v, more := a.Next()
 			assert.True(t, more)
 			assert.Equal(t, v, i)
 		}
+
 		v, more := a.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 
 		v, more = a.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 	}()
 
 	go func() {
 		defer wg.Done()
-		for i := 0; i < n; i++ {
+
+		for i := range n {
 			v, more := b.Next()
 			assert.True(t, more)
 			assert.Equal(t, v, i)
 		}
+
 		v, more := b.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 
 		v, more = b.Next()
 		assert.False(t, more)
-		assert.Equal(t, v, 0)
+		assert.Equal(t, 0, v)
 	}()
 
 	wg.Wait()

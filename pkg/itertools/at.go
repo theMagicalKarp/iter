@@ -14,7 +14,7 @@ func At[T any](iter iter.Iterable[T], index int) (T, bool) {
 		return value, false
 	}
 
-	for i := 0; i < index; i++ {
+	for range index {
 		_, more := iter.Next()
 		if !more {
 			break

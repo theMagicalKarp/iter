@@ -28,7 +28,7 @@ func (i *iter[T]) Next() (T, bool) {
 	return value, true
 }
 
-// NewIter creates a new iterable from the given items.
+// New creates a new iterable from the given items.
 // It takes a variadic parameter `items` of type `T` and returns an `Iterable` of type `T`.
 // The `Iterable` allows iterating over the items using the `Next` method.
 func New[T any](items ...T) Iterable[T] {

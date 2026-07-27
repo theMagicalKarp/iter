@@ -1,35 +1,38 @@
-run:
-  skip-files:
-    - ".*_test.go"
+version: "2"
 
 linters:
   enable:
+    - arangolint
     - asasalint
     - asciicheck
     - bidichk
     - bodyclose
-    #! - containedctx
+    - canonicalheader
+    - clickhouselint
+    - containedctx
     - contextcheck
-    #! - copyloopvar
+    - copyloopvar
     - cyclop
     - decorder
-    #! - depguard
+    - depguard
     - dogsled
     - dupl
     - dupword
     - durationcheck
+    - embeddedstructfieldcheck
+    - err113
     - errcheck
     - errchkjson
     - errname
     - errorlint
-    - execinquery
     - exhaustive
-    #! - exhaustruct
-    - exportloopref
-    #! - forbidigo
+    - exhaustruct
+    - exptostd
+    - fatcontext
+    - forbidigo
     - forcetypeassert
+    - funcorder
     - funlen
-    - gci
     - ginkgolinter
     - gocheckcompilerdirectives
     - gochecknoglobals
@@ -39,41 +42,42 @@ linters:
     - goconst
     - gocritic
     - gocyclo
+    - godoclint
     - godot
     - godox
-    - goerr113
-    - gofmt
-    - gofumpt
     - goheader
-    - goimports
-    - gomnd
     - gomoddirectives
-    - gomodguard
+    - gomodguard_v2
     - goprintffuncname
     - gosec
-    - gosimple
     - gosmopolitan
     - govet
     - grouper
+    - iface
     - importas
     - inamedparam
     - ineffassign
     - interfacebloat
-    #! - intrange
-    #! - ireturn
+    - intrange
+    - iotamixing
+    - ireturn
     - lll
     - loggercheck
     - maintidx
     - makezero
     - mirror
     - misspell
+    - mnd
+    - modernize
     - musttag
     - nakedret
     - nestif
     - nilerr
+    - nilnesserr
     - nilnil
     - nlreturn
     - noctx
+    - noinlineerr
     - nolintlint
     - nonamedreturns
     - nosprintfhostport
@@ -84,29 +88,91 @@ linters:
     - promlinter
     - protogetter
     - reassign
+    - recvcheck
     - revive
     - rowserrcheck
     - sloglint
     - spancheck
     - sqlclosecheck
     - staticcheck
-    - stylecheck
     - tagalign
     - tagliatelle
-    - tenv
     - testableexamples
     - testifylint
     - testpackage
     - thelper
     - tparallel
-    - typecheck
     - unconvert
     - unparam
+    - unqueryvet
     - unused
     - usestdlibvars
+    - usetesting
     - varnamelen
     - wastedassign
     - whitespace
     - wrapcheck
-    - wsl
+    - wsl_v5
     - zerologlint
+  exclusions:
+    paths:
+      - builtin$
+    rules:
+      # The examples are runnable Advent of Code solutions, not library code.
+      # Printing the answer to stdout is the whole point of a `main`, the
+      # puzzle inputs are fetched from long unsplittable gist URLs, and puzzle
+      # constants (digit words, base 10) are inherent to the problem rather
+      # than unnamed magic. Everything else is linted as normal.
+      - path: ^examples/
+        linters:
+          - forbidigo
+          - lll
+          - mnd
+
+      # Test code has different idioms than library code. Short-lived locals
+      # (`v`, `wg`, `tc`), throwaway `errors.New` sentinels, repeated string
+      # fixtures, long table tests, and `math/rand` for generating input are all
+      # fine in a test but not in the library, so scope these off tests rather
+      # than off the whole repo. `dupl` is excluded because tests for parallel
+      # APIs (All/Any, Take/TakeWhile) are legitimately near-identical.
+      - path: _test\.go
+        linters:
+          - dupl
+          - err113
+          - funlen
+          - goconst
+          - gosec
+          - varnamelen
+
+  settings:
+    depguard:
+      rules:
+        main:
+          allow:
+            - $gostd
+            - github.com/theMagicalKarp/iter/pkg/iter
+            - github.com/theMagicalKarp/iter/pkg/predicates
+            - github.com/theMagicalKarp/iter/pkg/containers/tuple
+            - golang.org/x/exp/constraints
+            - github.com/stretchr/testify/assert
+            - github.com/stretchr/testify/require
+
+    ireturn:
+      # This is a generics library, so returning a type parameter is the point
+      # of nearly every function here. `generic` is added to ireturn's defaults
+      # (anon, error, empty, stdlib) so the rule still catches genuine returns
+      # of non-generic interfaces.
+      allow:
+        - anon
+        - error
+        - empty
+        - stdlib
+        - generic
+
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+    - golines

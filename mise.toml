@@ -1,0 +1,32 @@
+[tools]
+# First entry is the default toolchain; the rest are the older releases CI
+# exercises in its matrix, kept here so they land in mise.lock too.
+go = ["1.26.5", "1.25.12"]
+golangci-lint = "2.12.2"
+
+[settings]
+lockfile = true
+
+[tasks.test]
+description = "Run the test suite"
+run = "go test ./..."
+
+[tasks.lint]
+description = "Lint the codebase"
+run = "golangci-lint run ./..."
+
+[tasks.fmt]
+description = "Apply formatters to the codebase"
+run = "golangci-lint fmt ./..."
+
+[tasks.tidy]
+description = "Tidy go.mod and go.sum"
+run = "go mod tidy"
+
+[tasks.fix]
+description = "Auto-apply formatting and golangci-lint fixes"
+run = ["golangci-lint fmt", "golangci-lint run --fix"]
+
+[tasks.check]
+description = "Run everything CI runs"
+depends = ["test", "lint"]

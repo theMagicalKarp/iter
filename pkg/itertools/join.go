@@ -45,6 +45,7 @@ func Join[T any](iter iter.Iterable[T], separator T) iter.Iterable[T] {
 	return &jointIter[T]{
 		iter:      iter,
 		separator: separator,
+		last:      nil,
 		firstPull: true,
 	}
 }

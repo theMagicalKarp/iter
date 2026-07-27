@@ -33,6 +33,7 @@ func TestChainBasic(t *testing.T) {
 		assert.True(t, more)
 		assert.Equal(t, i, v)
 	}
+
 	v, more := chainIter.Next()
 	assert.False(t, more)
 	assert.Equal(t, 0, v)

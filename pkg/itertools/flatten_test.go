@@ -39,6 +39,7 @@ func TestFlattenBasic(t *testing.T) {
 		assert.True(t, more)
 		assert.Equal(t, i, v)
 	}
+
 	v, more := items.Next()
 	assert.False(t, more)
 	assert.Equal(t, 0, v)
@@ -65,6 +66,7 @@ func TestFlattenBasicMulti(t *testing.T) {
 		assert.True(t, more)
 		assert.Equal(t, i, v)
 	}
+
 	v, more := items.Next()
 	assert.False(t, more)
 	assert.Equal(t, 0, v)
@@ -92,6 +94,7 @@ func TestFlattenWithEmpties(t *testing.T) {
 		assert.True(t, more)
 		assert.Equal(t, i, v)
 	}
+
 	v, more := items.Next()
 	assert.False(t, more)
 	assert.Equal(t, 0, v)

@@ -71,11 +71,11 @@ func TestAccumulateStrings(t *testing.T) {
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 }
 
 func TestAccumulateEmpty(t *testing.T) {
@@ -85,9 +85,9 @@ func TestAccumulateEmpty(t *testing.T) {
 
 	v, more := items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 }

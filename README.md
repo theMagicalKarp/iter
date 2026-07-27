@@ -80,9 +80,21 @@ clever and easy-to-understand solutions.
 Since many of the itertools functions accept and return iterables, you can plug
 and play various functions to achieve a desired result.
 
+## Development
+
+Toolchain versions are managed with [mise](https://mise.jdx.dev/). Once mise is
+installed, run the following from the repository root to get the pinned Go and
+golangci-lint versions:
+
+```Shell
+mise install
+```
+
 ## Test
 
 ```Shell
-go test ./...
-golangci-lint run
+mise run test   # go test ./...
+mise run lint   # golangci-lint run ./...
+mise run fmt    # golangci-lint fmt ./...
+mise run check  # test + lint
 ```

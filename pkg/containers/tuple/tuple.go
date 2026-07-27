@@ -1,3 +1,6 @@
+// Package tuple provides a small generic container holding two values of
+// independent types, useful for representing key/value or value/error pairs
+// as they flow through an iterable.
 package tuple
 
 // Tuple is a structure which contains two distinct values. These values are

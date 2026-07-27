@@ -1,7 +1,7 @@
 package itertools_test
 
 import (
-	"fmt"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,10 +22,7 @@ func ExampleMap() {
 func TestMapBasic(t *testing.T) {
 	t.Parallel()
 
-	itemsIter := itertools.Map(iter.New(1, 2, 3, 4, 5, 6),
-		func(i int) string {
-			return fmt.Sprintf("%d", i)
-		})
+	itemsIter := itertools.Map(iter.New(1, 2, 3, 4, 5, 6), strconv.Itoa)
 
 	items := make([]string, 0, 6)
 
@@ -34,22 +31,21 @@ func TestMapBasic(t *testing.T) {
 		if !more {
 			break
 		}
+
 		items = append(items, item)
 	}
 
 	assert.Equal(t, []string{"1", "2", "3", "4", "5", "6"}, items)
+
 	item, more := itemsIter.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", item)
+	assert.Empty(t, item)
 }
 
 func TestMapBasicEmpty(t *testing.T) {
 	t.Parallel()
 
-	itemsIter := itertools.Map(iter.New[int](),
-		func(i int) string {
-			return fmt.Sprintf("%d", i)
-		})
+	itemsIter := itertools.Map(iter.New[int](), strconv.Itoa)
 
 	items := make([]string, 0, 6)
 
@@ -58,11 +54,13 @@ func TestMapBasicEmpty(t *testing.T) {
 		if !more {
 			break
 		}
+
 		items = append(items, item)
 	}
 
 	assert.Equal(t, []string{}, items)
+
 	item, more := itemsIter.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", item)
+	assert.Empty(t, item)
 }

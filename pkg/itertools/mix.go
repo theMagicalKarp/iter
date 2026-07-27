@@ -10,7 +10,7 @@ type mixIter[T any] struct {
 }
 
 func (m *mixIter[T]) Next() (T, bool) {
-	for i := 0; i < len(m.mix); i++ {
+	for range len(m.mix) {
 		value, more := m.mix[m.index].Next()
 		m.index = (m.index + 1) % len(m.mix)
 

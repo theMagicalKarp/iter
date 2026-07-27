@@ -70,7 +70,7 @@ func TestPartitionBasic(t *testing.T) {
 func TestPartitionLopsided(t *testing.T) {
 	t.Parallel()
 
-	items1, items2 := itertools.Partition(iter.New(1, 2, 3, 4, 5, 6), func(i int) bool {
+	items1, items2 := itertools.Partition(iter.New(1, 2, 3, 4, 5, 6), func(_ int) bool {
 		return true
 	})
 

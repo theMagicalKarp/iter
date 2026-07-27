@@ -15,6 +15,10 @@ func (p *pairIter[T]) Next() (tuple.Tuple[T, T], bool) {
 	return tuple.New(empty, empty), false
 }
 
+// Pair groups the elements of an iterable into two element tuples.
+//
+// Pair is not implemented yet. The returned iterable is always empty,
+// regardless of the input.
 func Pair[T any](items iter.Iterable[T]) iter.Iterable[tuple.Tuple[T, T]] {
 	return &pairIter[T]{
 		items: items,

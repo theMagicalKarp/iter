@@ -20,7 +20,7 @@ func TestRepeat(t *testing.T) {
 	value := "hello"
 	repeat := itertools.Repeat(value)
 
-	for i := 0; i < 5; i++ {
+	for range 5 {
 		v, more := repeat.Next()
 		assert.True(t, more)
 		assert.Equal(t, v, value)
@@ -28,5 +28,5 @@ func TestRepeat(t *testing.T) {
 
 	v, more := repeat.Next()
 	assert.True(t, more)
-	assert.Equal(t, v, "hello")
+	assert.Equal(t, "hello", v)
 }

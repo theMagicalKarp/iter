@@ -45,7 +45,7 @@ func TestAtOverflow(t *testing.T) {
 
 	result, more := itertools.At(iter.New("a", "b", "c", "d", "e"), 10)
 	assert.False(t, more)
-	assert.Equal(t, "", result)
+	assert.Empty(t, result)
 }
 
 func TestAtNegative(t *testing.T) {
@@ -53,5 +53,5 @@ func TestAtNegative(t *testing.T) {
 
 	result, more := itertools.At(iter.New("a", "b", "c", "d", "e"), -10)
 	assert.False(t, more)
-	assert.Equal(t, "", result)
+	assert.Empty(t, result)
 }

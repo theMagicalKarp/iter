@@ -2,7 +2,7 @@ package itertools_test
 
 import (
 	"context"
-	"fmt"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -12,7 +12,7 @@ import (
 
 func ExampleAsync() {
 	items := itertools.Async(context.Background(), iter.New(1, 2, 3), 2,
-		func(ctx context.Context, x int) int {
+		func(_ context.Context, x int) int {
 			return x * 2
 		})
 
@@ -27,8 +27,8 @@ func TestAsyncBasic(t *testing.T) {
 	t.Parallel()
 
 	itemsIter := itertools.Async(context.TODO(), iter.New(1, 2, 3, 4, 5, 6), 3,
-		func(ctx context.Context, i int) string {
-			return fmt.Sprintf("%d", i)
+		func(_ context.Context, i int) string {
+			return strconv.Itoa(i)
 		})
 
 	items := make([]string, 0, 6)
@@ -38,6 +38,7 @@ func TestAsyncBasic(t *testing.T) {
 		if !more {
 			break
 		}
+
 		items = append(items, item)
 	}
 
@@ -48,8 +49,8 @@ func TestAsyncEmpty(t *testing.T) {
 	t.Parallel()
 
 	itemsIter := itertools.Async(context.TODO(), iter.New[int](), 3,
-		func(ctx context.Context, i int) string {
-			return fmt.Sprintf("%d", i)
+		func(_ context.Context, i int) string {
+			return strconv.Itoa(i)
 		})
 
 	items := make([]string, 0, 6)
@@ -59,6 +60,7 @@ func TestAsyncEmpty(t *testing.T) {
 		if !more {
 			break
 		}
+
 		items = append(items, item)
 	}
 
@@ -69,8 +71,8 @@ func TestAsyncNegativeWorker(t *testing.T) {
 	t.Parallel()
 
 	itemsIter := itertools.Async(context.TODO(), iter.New(1, 2, 3, 4, 5, 6), -3,
-		func(ctx context.Context, i int) string {
-			return fmt.Sprintf("%d", i)
+		func(_ context.Context, i int) string {
+			return strconv.Itoa(i)
 		})
 
 	items := make([]string, 0, 6)
@@ -80,6 +82,7 @@ func TestAsyncNegativeWorker(t *testing.T) {
 		if !more {
 			break
 		}
+
 		items = append(items, item)
 	}
 
@@ -90,8 +93,8 @@ func TestAsyncSingleWorker(t *testing.T) {
 	t.Parallel()
 
 	itemsIter := itertools.Async(context.TODO(), iter.New(1, 2, 3, 4, 5, 6), 1,
-		func(ctx context.Context, i int) string {
-			return fmt.Sprintf("%d", i)
+		func(_ context.Context, i int) string {
+			return strconv.Itoa(i)
 		})
 
 	items := make([]string, 0, 6)
@@ -101,6 +104,7 @@ func TestAsyncSingleWorker(t *testing.T) {
 		if !more {
 			break
 		}
+
 		items = append(items, item)
 	}
 
@@ -114,8 +118,8 @@ func TestAsyncDeadContext(t *testing.T) {
 	cancel()
 
 	itemsIter := itertools.Async(ctx, iter.New(1, 2, 3, 4, 5, 6), 6,
-		func(ctx context.Context, i int) string {
-			return fmt.Sprintf("%d", i)
+		func(_ context.Context, i int) string {
+			return strconv.Itoa(i)
 		})
 
 	items := make([]string, 0, 6)
@@ -125,30 +129,31 @@ func TestAsyncDeadContext(t *testing.T) {
 		if !more {
 			break
 		}
+
 		items = append(items, item)
 	}
 
-	assert.ElementsMatch(t, []string{}, items, fmt.Sprintf("%v", items))
+	assert.ElementsMatch(t, []string{}, items, "%v", items)
 }
 
 func TestAsyncDryPull(t *testing.T) {
 	t.Parallel()
 
 	itemsIter := itertools.Async(context.TODO(), iter.New[int](), 3,
-		func(ctx context.Context, i int) string {
-			return fmt.Sprintf("%d", i)
+		func(_ context.Context, i int) string {
+			return strconv.Itoa(i)
 		})
 
 	v, more := itemsIter.Next()
-	assert.Equal(t, v, "")
-	assert.Equal(t, more, false)
+	assert.Empty(t, v)
+	assert.False(t, more)
 }
 
 func TestAsyncStressTest(t *testing.T) {
 	t.Parallel()
 
 	itemsIter := itertools.Async(context.TODO(), itertools.Range(0, 10000), 16,
-		func(ctx context.Context, i int) int {
+		func(_ context.Context, i int) int {
 			return -i
 		})
 
@@ -159,12 +164,13 @@ func TestAsyncStressTest(t *testing.T) {
 		if !more {
 			break
 		}
+
 		items = append(items, item)
 	}
 
 	expected := make([]int, 0, 10000)
 
-	for i := 0; i < 10000; i++ {
+	for i := range 10000 {
 		expected = append(expected, -i)
 	}
 

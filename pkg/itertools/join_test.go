@@ -27,7 +27,7 @@ func TestBasicJoin(t *testing.T) {
 
 		v, more = items.Next()
 		assert.True(t, more)
-		assert.Equal(t, v, 42)
+		assert.Equal(t, 42, v)
 	}
 
 	v, more := items.Next()
@@ -40,7 +40,7 @@ func TestBasicJoin(t *testing.T) {
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, v, 0)
+	assert.Equal(t, 0, v)
 }
 
 func TestJoinEmpty(t *testing.T) {

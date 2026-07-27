@@ -38,5 +38,5 @@ func TestSumEmpty(t *testing.T) {
 
 	result := itertools.Sum(iter.New[string]())
 
-	assert.Equal(t, "", result)
+	assert.Empty(t, result)
 }

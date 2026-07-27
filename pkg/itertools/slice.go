@@ -27,13 +27,16 @@ func Slice[T any](items iter.Iterable[T]) []T {
 func SliceN[T any](items iter.Iterable[T], start, stop int) []T {
 	toReturn := make([]T, 0)
 
-	var index int
-	for index = 0; index < start; index++ {
+	for range start {
 		_, more := items.Next()
 		if !more {
 			return toReturn
 		}
 	}
+
+	// The skip loop above consumed exactly start items, unless start was
+	// negative, in which case nothing was consumed and indexing begins at 0.
+	index := max(start, 0)
 
 	for item, more := items.Next(); more; item, more = items.Next() {
 		if index >= stop {

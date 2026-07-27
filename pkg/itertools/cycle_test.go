@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
 	"github.com/theMagicalKarp/iter/pkg/iter"
 	"github.com/theMagicalKarp/iter/pkg/itertools"
 )
@@ -20,7 +19,7 @@ func TestCycleBasic(t *testing.T) {
 
 	cycleIter := itertools.Cycle(iter.New(1, 2, 3))
 
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		for j := 1; j < 4; j++ {
 			v, more := cycleIter.Next()
 			assert.True(t, more)

@@ -9,17 +9,20 @@ import (
 	"github.com/theMagicalKarp/iter/pkg/iter"
 )
 
-type iterWriter struct {
+// IterWriter is an io.WriteCloser which buffers everything written to it and
+// hands it back out as an iterable of byte slices. Use Writer to construct one.
+type IterWriter struct {
 	closed bool
 	buffer bytes.Buffer
 }
 
+// ErrClosedIter is returned by Write when the writer has already been closed.
 var ErrClosedIter = errors.New("io: write on closed iter")
 
 // Next returns the next batch of bytes from the iterator's buffer.
 // If the buffer is empty and the iterator is closed, it returns an empty byte slice and false.
 // Otherwise, it returns a copy of the buffer's contents and true.
-func (i *iterWriter) Next() ([]byte, bool) {
+func (i *IterWriter) Next() ([]byte, bool) {
 	if i.buffer.Len() == 0 && i.closed {
 		return []byte{}, false
 	}
@@ -34,7 +37,7 @@ func (i *iterWriter) Next() ([]byte, bool) {
 // Write writes the contents of the given byte slice to the iterator writer's buffer.
 // It returns the number of bytes written and any error encountered.
 // If the iterator writer is closed, it returns an error indicating that the writer is closed.
-func (i *iterWriter) Write(p []byte) (int, error) {
+func (i *IterWriter) Write(p []byte) (int, error) {
 	if i.closed {
 		return 0, ErrClosedIter
 	}
@@ -47,24 +50,26 @@ func (i *iterWriter) Write(p []byte) (int, error) {
 	return n, nil
 }
 
-// Close closes the iterWriter and marks it as closed.
+// Close closes the IterWriter and marks it as closed.
 // It returns nil error.
-func (i *iterWriter) Close() error {
+func (i *IterWriter) Close() error {
 	i.closed = true
 
 	return nil
 }
 
+// IterWriteCloser is the behaviour implemented by IterWriter: an io.WriteCloser
+// whose contents can also be consumed as an iterable of byte slices.
 type IterWriteCloser interface {
 	io.WriteCloser
 	iter.Iterable[[]byte]
 }
 
-// Writer returns a new instance of io.WriteCloser and iter.Iterable.
+// Writer returns a new IterWriter, which implements both io.WriteCloser and iter.Iterable.
 // Data written to this writer is stored to a buffer and then read it back as an iterable of byte slices.
 // The writer can be closed to signal the end of the data, otherwise it will infinity return empty slices.
 // After closing, the writer will continue to return results from the buffer until it is empty,
 // and will not accept any more writes.
-func Writer() IterWriteCloser {
-	return &iterWriter{closed: false}
+func Writer() *IterWriter {
+	return &IterWriter{closed: false, buffer: bytes.Buffer{}}
 }

@@ -1,6 +1,9 @@
+// Package main solves Advent of Code 2023 day 3 as a demonstration of the
+// iter library.
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"unicode"
@@ -9,6 +12,8 @@ import (
 	"github.com/theMagicalKarp/iter/pkg/iter"
 	"github.com/theMagicalKarp/iter/pkg/itertools"
 )
+
+const inputURL = "https://gist.githubusercontent.com/theMagicalKarp/089e97377f559b65503d17f8dddea5f4/raw/18d74d27fee9d727d4dbc50ce85569eb2ced8a75/advent_2023_day3.txt"
 
 type Coordinate struct {
 	x, y int
@@ -24,7 +29,7 @@ func Value(n Number) int {
 }
 
 func ProcessLine(line tuple.Tuple[int, string]) iter.Iterable[Number] {
-	y := line.First()
+	row := line.First()
 	runes := itertools.Enumerate(itertools.Runes(line.Second()))
 	numbers := make([]Number, 0)
 
@@ -32,9 +37,9 @@ func ProcessLine(line tuple.Tuple[int, string]) iter.Iterable[Number] {
 	neighbors := make([]Coordinate, 0)
 
 	itertools.Each(runes, func(item tuple.Tuple[int, rune]) {
-		x, r := item.Unpack()
+		column, char := item.Unpack()
 
-		if !unicode.IsDigit(r) && value > 0 {
+		if !unicode.IsDigit(char) && value > 0 {
 			numbers = append(numbers, Number{
 				value:     value,
 				neighbors: neighbors,
@@ -44,18 +49,19 @@ func ProcessLine(line tuple.Tuple[int, string]) iter.Iterable[Number] {
 			neighbors = make([]Coordinate, 0)
 		}
 
-		if unicode.IsDigit(r) {
-			value = value*10 + int(r-'0')
-			neighbors = append(neighbors, Coordinate{x - 1, y - 1})
-			neighbors = append(neighbors, Coordinate{x, y - 1})
-			neighbors = append(neighbors, Coordinate{x + 1, y - 1})
+		if unicode.IsDigit(char) {
+			value = value*10 + int(char-'0')
 
-			neighbors = append(neighbors, Coordinate{x - 1, y})
-			neighbors = append(neighbors, Coordinate{x + 1, y})
+			neighbors = append(neighbors, Coordinate{column - 1, row - 1})
+			neighbors = append(neighbors, Coordinate{column, row - 1})
+			neighbors = append(neighbors, Coordinate{column + 1, row - 1})
 
-			neighbors = append(neighbors, Coordinate{x - 1, y + 1})
-			neighbors = append(neighbors, Coordinate{x, y + 1})
-			neighbors = append(neighbors, Coordinate{x + 1, y + 1})
+			neighbors = append(neighbors, Coordinate{column - 1, row})
+			neighbors = append(neighbors, Coordinate{column + 1, row})
+
+			neighbors = append(neighbors, Coordinate{column - 1, row + 1})
+			neighbors = append(neighbors, Coordinate{column, row + 1})
+			neighbors = append(neighbors, Coordinate{column + 1, row + 1})
 		}
 	})
 
@@ -69,25 +75,28 @@ func ProcessLine(line tuple.Tuple[int, string]) iter.Iterable[Number] {
 	return iter.New(numbers...)
 }
 
-func RuneToCoordinate(y int) func(tuple.Tuple[int, rune]) tuple.Tuple[Coordinate, rune] {
+func RuneToCoordinate(row int) func(tuple.Tuple[int, rune]) tuple.Tuple[Coordinate, rune] {
 	return func(item tuple.Tuple[int, rune]) tuple.Tuple[Coordinate, rune] {
-		x, r := item.Unpack()
-		return tuple.New(Coordinate{x, y}, r)
+		column, char := item.Unpack()
+
+		return tuple.New(Coordinate{column, row}, char)
 	}
 }
 
 func RuneIsSymbol(item tuple.Tuple[Coordinate, rune]) bool {
-	r := item.Second()
-	return !(unicode.IsDigit(r) || r == '.')
+	char := item.Second()
+
+	return !unicode.IsDigit(char) && char != '.'
 }
 
 func SymbolCoordinates(line tuple.Tuple[int, string]) iter.Iterable[Coordinate] {
-	y := line.First()
+	row := line.First()
 
 	runes := itertools.Enumerate(itertools.Runes(line.Second()))
-	runeCordinates := itertools.Map(runes, RuneToCoordinate(y))
-	runeCordinates = itertools.Filter(runeCordinates, RuneIsSymbol)
-	return itertools.Map(runeCordinates, tuple.First)
+	runeCoordinates := itertools.Map(runes, RuneToCoordinate(row))
+	runeCoordinates = itertools.Filter(runeCoordinates, RuneIsSymbol)
+
+	return itertools.Map(runeCoordinates, tuple.First)
 }
 
 func IsAdjacent(coordinates map[Coordinate]bool) func(Number) bool {
@@ -99,11 +108,17 @@ func IsAdjacent(coordinates map[Coordinate]bool) func(Number) bool {
 }
 
 func main() {
-	resp, err := http.Get("https://gist.githubusercontent.com/theMagicalKarp/089e97377f559b65503d17f8dddea5f4/raw/18d74d27fee9d727d4dbc50ce85569eb2ced8a75/advent_2023_day3.txt")
+	request, err := http.NewRequestWithContext(context.Background(), http.MethodGet, inputURL, nil)
 	if err != nil {
 		panic(err)
 	}
-	defer resp.Body.Close()
+
+	resp, err := http.DefaultClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer func() { _ = resp.Body.Close() }()
 
 	first, second := itertools.Tee(itertools.Enumerate(itertools.Lines(resp.Body)))
 
