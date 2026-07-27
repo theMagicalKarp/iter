@@ -1,4 +1,4 @@
-// Predicates is a package that provides a set of predicate functions that can be used in conjunction of the itertools
+// Package predicates provides a set of predicate functions that can be used in conjunction of the itertools
 // package to filter and transform iterables.
 package predicates
 

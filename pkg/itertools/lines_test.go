@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/theMagicalKarp/iter/pkg/iter"
 	"github.com/theMagicalKarp/iter/pkg/itertools"
 )
@@ -42,7 +43,7 @@ func TestLinesBasic(t *testing.T) {
 
 	v, more = items.Next()
 	assert.True(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 
 	v, more = items.Next()
 	assert.True(t, more)
@@ -50,11 +51,11 @@ func TestLinesBasic(t *testing.T) {
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 }
 
 func TestLinesNoNewLines(t *testing.T) {
@@ -68,11 +69,11 @@ func TestLinesNoNewLines(t *testing.T) {
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 }
 
 func TestLinesEmpty(t *testing.T) {
@@ -82,11 +83,11 @@ func TestLinesEmpty(t *testing.T) {
 
 	v, more := items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 }
 
 func TestWithReader(t *testing.T) {
@@ -121,11 +122,11 @@ func TestWithReader(t *testing.T) {
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 }
 
 func TestWithReaderWriter(t *testing.T) {
@@ -145,10 +146,11 @@ func TestWithReaderWriter(t *testing.T) {
 
 	for _, b := range toWrite {
 		n, err := io.Copy(writer, bytes.NewReader(b))
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, int64(len(b)), n)
 	}
-	writer.Close()
+
+	require.NoError(t, writer.Close())
 
 	v, more := items.Next()
 	assert.True(t, more)
@@ -168,11 +170,11 @@ func TestWithReaderWriter(t *testing.T) {
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 }
 
 func TestWithReaderWriterSmallBuffer(t *testing.T) {
@@ -193,10 +195,11 @@ func TestWithReaderWriterSmallBuffer(t *testing.T) {
 	buffer := make([]byte, 3)
 	for _, b := range toWrite {
 		n, err := io.CopyBuffer(writer, bytes.NewReader(b), buffer)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, int64(len(b)), n)
 	}
-	writer.Close()
+
+	require.NoError(t, writer.Close())
 
 	v, more := items.Next()
 	assert.True(t, more)
@@ -216,9 +219,9 @@ func TestWithReaderWriterSmallBuffer(t *testing.T) {
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 
 	v, more = items.Next()
 	assert.False(t, more)
-	assert.Equal(t, "", v)
+	assert.Empty(t, v)
 }

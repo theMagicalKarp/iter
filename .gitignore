@@ -15,3 +15,7 @@
 # vendor/
 
 .DS_Store
+
+# Local mise overrides
+mise.local.toml
+.mise.local.toml

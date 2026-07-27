@@ -6,7 +6,7 @@ import "github.com/theMagicalKarp/iter/pkg/iter"
 // The keys of the map are ignored.
 // The order of the values in the returned iterable is not guaranteed to be the same as the original map.
 func Values[K comparable, V any](items map[K]V) iter.Iterable[V] {
-	toReturn := make([]V, 0)
+	toReturn := make([]V, 0, len(items))
 
 	for _, item := range items {
 		toReturn = append(toReturn, item)

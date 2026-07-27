@@ -24,6 +24,8 @@ func ExampleSliceN() {
 }
 
 func TestBasicSlice(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		input    []int
 		expected []int
@@ -41,6 +43,8 @@ func TestBasicSlice(t *testing.T) {
 }
 
 func TestBasicSliceN(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		input    []int
 		start    int

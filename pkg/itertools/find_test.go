@@ -49,7 +49,7 @@ func TestFindEmpty(t *testing.T) {
 
 	target := iter.New[int]()
 
-	resp, found := itertools.Find(target, func(i int) bool {
+	resp, found := itertools.Find(target, func(_ int) bool {
 		return true
 	})
 

@@ -1,6 +1,9 @@
+// Package main solves Advent of Code 2023 day 1 as a demonstration of the
+// iter library.
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
@@ -10,35 +13,30 @@ import (
 	"github.com/theMagicalKarp/iter/pkg/predicates"
 )
 
-var WORD_TO_DIGIT = map[string]int{
-	"one":   1,
-	"two":   2,
-	"three": 3,
-	"four":  4,
-	"five":  5,
-	"six":   6,
-	"seven": 7,
-	"eight": 8,
-	"nine":  9,
-}
+const inputURL = "https://gist.githubusercontent.com/theMagicalKarp/089e97377f559b65503d17f8dddea5f4/raw/18d74d27fee9d727d4dbc50ce85569eb2ced8a75/advent_2023_day1.txt"
 
-func ToDigit(s string) int {
-	if unicode.IsDigit(rune(s[0])) {
-		return int(s[0] - '0')
+// ToDigit reads the digit at the start of text, accepting either a numeral or
+// an English digit name, and returns -1 when text starts with neither.
+func ToDigit(text string) int {
+	if unicode.IsDigit(rune(text[0])) {
+		return int(text[0] - '0')
 	}
 
-	for k, v := range WORD_TO_DIGIT {
-		if strings.HasPrefix(s, k) {
-			return v
+	// Ordered by value, so a word's index is one less than the digit it names.
+	words := []string{"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
+
+	for index, word := range words {
+		if strings.HasPrefix(text, word) {
+			return index + 1
 		}
 	}
 
 	return -1
 }
 
-func ChopString(s string) func(int) string {
+func ChopString(text string) func(int) string {
 	return func(i int) string {
-		return s[i:]
+		return text[i:]
 	}
 }
 
@@ -62,13 +60,20 @@ func ProcessLine(line string) int {
 }
 
 func main() {
-	resp, err := http.Get("https://gist.githubusercontent.com/theMagicalKarp/089e97377f559b65503d17f8dddea5f4/raw/18d74d27fee9d727d4dbc50ce85569eb2ced8a75/advent_2023_day1.txt")
+	request, err := http.NewRequestWithContext(context.Background(), http.MethodGet, inputURL, nil)
 	if err != nil {
 		panic(err)
 	}
-	defer resp.Body.Close()
+
+	resp, err := http.DefaultClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer func() { _ = resp.Body.Close() }()
 
 	lines := itertools.Lines(resp.Body)
 	readings := itertools.Map(lines, ProcessLine)
+
 	fmt.Println(itertools.Sum(readings))
 }

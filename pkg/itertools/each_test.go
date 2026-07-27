@@ -22,6 +22,7 @@ func ExampleEach() {
 func ExampleEachUntil() {
 	itertools.EachUntil(iter.New(1, 2, 3, 4, 5), func(item int) bool {
 		fmt.Println(item)
+
 		return item == 3
 	})
 	// Output:
@@ -48,7 +49,7 @@ func TestEachBasic(t *testing.T) {
 func TestEachEmpty(t *testing.T) {
 	t.Parallel()
 
-	itertools.Each(iter.New[int](), func(i int) {
+	itertools.Each(iter.New[int](), func(_ int) {
 		assert.Fail(t, "should not have been called")
 	})
 }

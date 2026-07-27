@@ -5,30 +5,26 @@ on:
     branches:
       - main
   pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
 
 jobs:
   test-lint:
-    name: Test/Lint
+    name: Test/Lint (go ${{ matrix.go-version }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        go-version: [ '1.21', '1.22' ]
+        # Exact patches, so they resolve against mise.lock in --locked mode.
+        go-version: ["1.25.12", "1.26.5"]
+
+    env:
+      MISE_GO_VERSION: ${{ matrix.go-version }}
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Go ${{ matrix.go-version }}
-        uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
-
-      - name: Tests
-        run: go test ./...
-
-      - name: Linter
-        uses: golangci/golangci-lint-action@v4
-        with:
-          version: v1.56.2
+      - uses: actions/checkout@v7
+      - uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
+      - run: mise run check

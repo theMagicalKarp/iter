@@ -29,45 +29,52 @@ func TestZipBasic(t *testing.T) {
 
 	v, more := items.Next()
 	assert.True(t, more)
+
 	a, b := v.Unpack()
-	assert.Equal(t, a, 1)
-	assert.Equal(t, b, "a")
+	assert.Equal(t, 1, a)
+	assert.Equal(t, "a", b)
 
 	v, more = items.Next()
 	assert.True(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 2)
-	assert.Equal(t, b, "b")
+	assert.Equal(t, 2, a)
+	assert.Equal(t, "b", b)
 
 	v, more = items.Next()
 	assert.True(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 3)
-	assert.Equal(t, b, "c")
+	assert.Equal(t, 3, a)
+	assert.Equal(t, "c", b)
 
 	v, more = items.Next()
 	assert.True(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 4)
-	assert.Equal(t, b, "d")
+	assert.Equal(t, 4, a)
+	assert.Equal(t, "d", b)
 
 	v, more = items.Next()
 	assert.True(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 5)
-	assert.Equal(t, b, "e")
+	assert.Equal(t, 5, a)
+	assert.Equal(t, "e", b)
 
 	v, more = items.Next()
 	assert.True(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 6)
-	assert.Equal(t, b, "f")
+	assert.Equal(t, 6, a)
+	assert.Equal(t, "f", b)
 
 	v, more = items.Next()
 	assert.False(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 0)
-	assert.Equal(t, b, "")
+	assert.Equal(t, 0, a)
+	assert.Empty(t, b)
 }
 
 func TestZipUneven(t *testing.T) {
@@ -80,27 +87,31 @@ func TestZipUneven(t *testing.T) {
 
 	v, more := items.Next()
 	assert.True(t, more)
+
 	a, b := v.Unpack()
-	assert.Equal(t, a, 1)
-	assert.Equal(t, b, "a")
+	assert.Equal(t, 1, a)
+	assert.Equal(t, "a", b)
 
 	v, more = items.Next()
 	assert.True(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 2)
-	assert.Equal(t, b, "b")
+	assert.Equal(t, 2, a)
+	assert.Equal(t, "b", b)
 
 	v, more = items.Next()
 	assert.True(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 3)
-	assert.Equal(t, b, "c")
+	assert.Equal(t, 3, a)
+	assert.Equal(t, "c", b)
 
 	v, more = items.Next()
 	assert.False(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 0)
-	assert.Equal(t, b, "")
+	assert.Equal(t, 0, a)
+	assert.Empty(t, b)
 }
 
 func TestZipOtherUneven(t *testing.T) {
@@ -113,27 +124,31 @@ func TestZipOtherUneven(t *testing.T) {
 
 	v, more := items.Next()
 	assert.True(t, more)
+
 	a, b := v.Unpack()
-	assert.Equal(t, a, 1)
-	assert.Equal(t, b, "a")
+	assert.Equal(t, 1, a)
+	assert.Equal(t, "a", b)
 
 	v, more = items.Next()
 	assert.True(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 2)
-	assert.Equal(t, b, "b")
+	assert.Equal(t, 2, a)
+	assert.Equal(t, "b", b)
 
 	v, more = items.Next()
 	assert.True(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 3)
-	assert.Equal(t, b, "c")
+	assert.Equal(t, 3, a)
+	assert.Equal(t, "c", b)
 
 	v, more = items.Next()
 	assert.False(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 0)
-	assert.Equal(t, b, "")
+	assert.Equal(t, 0, a)
+	assert.Empty(t, b)
 }
 
 func TestZipEmpty(t *testing.T) {
@@ -146,13 +161,15 @@ func TestZipEmpty(t *testing.T) {
 
 	v, more := items.Next()
 	assert.False(t, more)
+
 	a, b := v.Unpack()
-	assert.Equal(t, a, 0)
-	assert.Equal(t, b, "")
+	assert.Equal(t, 0, a)
+	assert.Empty(t, b)
 
 	v, more = items.Next()
 	assert.False(t, more)
+
 	a, b = v.Unpack()
-	assert.Equal(t, a, 0)
-	assert.Equal(t, b, "")
+	assert.Equal(t, 0, a)
+	assert.Empty(t, b)
 }

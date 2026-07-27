@@ -40,21 +40,23 @@ func TestSortAsc(t *testing.T) {
 
 	// Call Next() to get the sorted elements
 	sortedList := []int{}
+
 	for {
 		elem, ok := iter.Next()
 		if !ok {
 			break
 		}
+
 		sortedList = append(sortedList, elem)
 	}
 
 	elemt, more := iter.Next()
 	assert.False(t, more)
-	assert.Equal(t, elemt, 0)
+	assert.Equal(t, 0, elemt)
 
 	elemt, more = iter.Next()
 	assert.False(t, more)
-	assert.Equal(t, elemt, 0)
+	assert.Equal(t, 0, elemt)
 
 	// Assert that the sorted list matches the expected result
 	expected := []int{1, 2, 5, 7, 9}
@@ -70,21 +72,23 @@ func TestSortDesc(t *testing.T) {
 
 	// Call Next() to get the sorted elements
 	sortedList := []int{}
+
 	for {
 		elem, ok := iter.Next()
 		if !ok {
 			break
 		}
+
 		sortedList = append(sortedList, elem)
 	}
 
 	elemt, more := iter.Next()
 	assert.False(t, more)
-	assert.Equal(t, elemt, 0)
+	assert.Equal(t, 0, elemt)
 
 	elemt, more = iter.Next()
 	assert.False(t, more)
-	assert.Equal(t, elemt, 0)
+	assert.Equal(t, 0, elemt)
 
 	// Assert that the sorted list matches the expected result
 	expected := []int{9, 7, 5, 2, 1}
@@ -100,21 +104,23 @@ func TestSortEmpty(t *testing.T) {
 
 	// Call Next() to get the sorted elements
 	sortedList := []int{}
+
 	for {
 		elem, ok := iter.Next()
 		if !ok {
 			break
 		}
+
 		sortedList = append(sortedList, elem)
 	}
 
 	elemt, more := iter.Next()
 	assert.False(t, more)
-	assert.Equal(t, elemt, 0)
+	assert.Equal(t, 0, elemt)
 
 	elemt, more = iter.Next()
 	assert.False(t, more)
-	assert.Equal(t, elemt, 0)
+	assert.Equal(t, 0, elemt)
 
 	// Assert that the sorted list matches the expected result
 	expected := []int{}
@@ -122,6 +128,8 @@ func TestSortEmpty(t *testing.T) {
 }
 
 func TestAsc(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		this, that, expected int
 	}{
@@ -138,12 +146,20 @@ func TestAsc(t *testing.T) {
 	for _, tc := range testCases {
 		result := itertools.Asc(tc.this, tc.that)
 		if result != tc.expected {
-			t.Errorf("Unexpected result for Asc(%d, %d): got %d, want %d", tc.this, tc.that, result, tc.expected)
+			t.Errorf(
+				"Unexpected result for Asc(%d, %d): got %d, want %d",
+				tc.this,
+				tc.that,
+				result,
+				tc.expected,
+			)
 		}
 	}
 }
 
 func TestDesc(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		this, that, expected int
 	}{
@@ -160,7 +176,13 @@ func TestDesc(t *testing.T) {
 	for _, tc := range testCases {
 		result := itertools.Desc(tc.this, tc.that)
 		if result != tc.expected {
-			t.Errorf("Unexpected result for Desc(%d, %d): got %d, want %d", tc.this, tc.that, result, tc.expected)
+			t.Errorf(
+				"Unexpected result for Desc(%d, %d): got %d, want %d",
+				tc.this,
+				tc.that,
+				result,
+				tc.expected,
+			)
 		}
 	}
 }

@@ -15,10 +15,7 @@ func (r *iterReader) Read(outBytes []byte) (int, error) {
 	written := 0
 
 	if len(r.buffer) > 0 {
-		toWrite := len(outBytes)
-		if len(r.buffer) < toWrite {
-			toWrite = len(r.buffer)
-		}
+		toWrite := min(len(r.buffer), len(outBytes))
 
 		copy(outBytes, r.buffer[:toWrite])
 		r.buffer = r.buffer[toWrite:]
@@ -31,10 +28,7 @@ func (r *iterReader) Read(outBytes []byte) (int, error) {
 			break
 		}
 
-		toWrite := len(outBytes) - written
-		if len(value) < toWrite {
-			toWrite = len(value)
-		}
+		toWrite := min(len(value), len(outBytes)-written)
 
 		copy(outBytes[written:], value[:toWrite])
 		r.buffer = value[toWrite:]

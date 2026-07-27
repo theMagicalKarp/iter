@@ -8,6 +8,8 @@ import (
 )
 
 func TestEmpty(t *testing.T) {
+	t.Parallel()
+
 	items := itertools.Empty[int]()
 	assert.NotNil(t, items)
 

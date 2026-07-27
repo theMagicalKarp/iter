@@ -34,6 +34,8 @@ func TestUniqueString(t *testing.T) {
 }
 
 func TestUniqueEmpty(t *testing.T) {
+	t.Parallel()
+
 	input3 := iter.New[int]()
 	expected3 := []int{}
 	result3 := itertools.Unique(input3)

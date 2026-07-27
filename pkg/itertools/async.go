@@ -16,7 +16,10 @@ type AsyncMapFn[T any, V any] func(ctx context.Context, item T) V
 
 type asyncIter[T any, V any] struct {
 	channel chan V
-	ctx     context.Context
+	// done mirrors the cancellation signal of the context passed to Async.
+	// Only the signal is retained rather than the context itself, so the
+	// iterator carries no request scoped state beyond what it needs.
+	done <-chan struct{}
 }
 
 func (a *asyncIter[T, V]) Next() (V, bool) {
@@ -26,7 +29,7 @@ func (a *asyncIter[T, V]) Next() (V, bool) {
 	)
 
 	select {
-	case <-a.ctx.Done():
+	case <-a.done:
 		return value, false
 	case value, more = <-a.channel:
 		return value, more
@@ -46,7 +49,11 @@ func pushToCannel[T any](ctx context.Context, input iter.Iterable[T], channel ch
 }
 
 func worker[T any, V any](
-	ctx context.Context, input chan T, output chan V, waitGroup *sync.WaitGroup, function AsyncMapFn[T, V],
+	ctx context.Context,
+	input chan T,
+	output chan V,
+	waitGroup *sync.WaitGroup,
+	function AsyncMapFn[T, V],
 ) {
 	defer waitGroup.Done()
 
@@ -87,7 +94,7 @@ func Async[T any, V any](
 	input := make(chan T, workers)
 	output := make(chan V, workers)
 
-	async := &asyncIter[T, V]{ctx: ctx, channel: output}
+	async := &asyncIter[T, V]{done: ctx.Done(), channel: output}
 
 	go pushToCannel(ctx, inIter, input)
 
@@ -95,7 +102,7 @@ func Async[T any, V any](
 
 	waitGroup.Add(workers)
 
-	for i := 0; i < workers; i++ {
+	for range workers {
 		go worker(ctx, input, output, &waitGroup, function)
 	}
 

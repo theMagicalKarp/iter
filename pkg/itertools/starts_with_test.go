@@ -11,9 +11,10 @@ import (
 
 func ExampleStartsWith() {
 	items := iter.New(1, 2, 3, 4, 5)
-	pre_items := iter.New(1, 2)
+	prefix := iter.New(1, 2)
 
-	fmt.Println(itertools.StartsWith(items, pre_items))
+	fmt.Println(itertools.StartsWith(items, prefix))
+	// Output: true
 }
 
 func TestStartsWithBasic(t *testing.T) {

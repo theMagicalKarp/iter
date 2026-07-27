@@ -30,6 +30,7 @@ func TestLogBasic(t *testing.T) {
 	t.Parallel()
 
 	var buf bytes.Buffer
+
 	logger := log.New(&buf, "~", 0)
 
 	items := itertools.Log(iter.New(1, 2, 3), logger, func(item int) string {
@@ -63,6 +64,7 @@ func TestLogEmpty(t *testing.T) {
 	t.Parallel()
 
 	var buf bytes.Buffer
+
 	logger := log.New(&buf, "~", 0)
 
 	items := itertools.Log(iter.New[int](), logger, func(item int) string {
@@ -77,5 +79,5 @@ func TestLogEmpty(t *testing.T) {
 	assert.False(t, more)
 	assert.Equal(t, 0, v)
 
-	assert.Equal(t, "", buf.String())
+	assert.Empty(t, buf.String())
 }

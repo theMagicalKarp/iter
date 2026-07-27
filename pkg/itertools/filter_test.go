@@ -43,7 +43,7 @@ func TestFilterBasic(t *testing.T) {
 func TestFilterEmpty(t *testing.T) {
 	t.Parallel()
 
-	items := itertools.Filter(iter.New[int](), func(i int) bool {
+	items := itertools.Filter(iter.New[int](), func(_ int) bool {
 		return true
 	})
 
@@ -59,7 +59,7 @@ func TestFilterEmpty(t *testing.T) {
 func TestFilterNoMatch(t *testing.T) {
 	t.Parallel()
 
-	items := itertools.Filter(iter.New(1, 2, 3, 4, 5), func(i int) bool {
+	items := itertools.Filter(iter.New(1, 2, 3, 4, 5), func(_ int) bool {
 		return false
 	})
 
