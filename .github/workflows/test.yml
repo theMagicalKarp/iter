@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         # Exact patches, so they resolve against mise.lock in --locked mode.
-        go-version: ["1.25.12", "1.26.5"]
+        go-version: ["1.26.8", "1.27.1"]
 
     env:
       MISE_GO_VERSION: ${{ matrix.go-version }}
