@@ -1,8 +1,8 @@
 [tools]
 # First entry is the default toolchain; the rest are the older releases CI
 # exercises in its matrix, kept here so they land in mise.lock too.
-go = ["1.26.5", "1.25.12"]
-golangci-lint = "2.12.2"
+go = ["1.26.8", "1.27.1"]
+golangci-lint = "2.14.0"
 
 [settings]
 lockfile = true
